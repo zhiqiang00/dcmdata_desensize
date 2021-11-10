@@ -13,7 +13,8 @@ def desensitization(prt, dcm_file_name, p3_path):
     :return: 将文件信息进行脱敏，并进行保存
     '''
 
-    ds = pydicom.dcmread(dcm_file_name)
+    ds = pydicom.dcmread(dcm_file_name)   # 读取文件
+    # 进行脱敏工作
     ds.InstitutionName = 'XXXXX'
     ds.InstitutionAddress = 'XXXXX'
     ds.InstitutionalDepartmentName = 'XXXXX'
@@ -33,10 +34,13 @@ def desensitization(prt, dcm_file_name, p3_path):
     ds.PerformedProcedureStepID = 'XXXXX'
     name = dcm_file_name.split('\\')[-1]
     save_path = '../data_desensize' + p3_path[7:]
+    # 判断新的save路径是否存在，不存在make一下
     if not os.path.exists(save_path):
         os.makedirs(save_path)
+    # 是否打印脱敏后的文件
     if prt:
         print(ds)
+    # 保存文件
     ds.save_as(os.path.join(save_path, name))
     print(dcm_file_name + "     脱敏完成------")
 
@@ -67,8 +71,8 @@ def read_files(prt, root_path='../data/'):
                         desensitization(prt, dcm_file_path, p3_path)
 
 if __name__ == '__main__':
+    '''
+        prt: 选择是否将脱敏后的数据打印出来。
+    '''
     read_files(prt=False)
-# ds = pydicom.dcmread('../data/01张三/TIWI/T1-2323387/dcm/ser003img00001.dcm')
-# dcm_file_name = r'../data/01张三/脂肪抑制/T2-2323387/dcm/ser007img00004.dcm'
-# dcm_file_name ='../data/01张三/TIWI/T1-2323387/dcm/ser003img00001.dcm'
-# desensitization(dcm_file_name)
+
